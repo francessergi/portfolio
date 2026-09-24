@@ -104,6 +104,7 @@ document.addEventListener('keydown', (event) => {
 
 const languageSelector = document.getElementById('language-selector');
 const supportedLanguages = ['en', 'es', 'ko'];
+const normalizeText = (text) => text.replace(/\s+/g, ' ').trim();
 const translations = {
   es: {
     Language: 'Idioma',
@@ -279,7 +280,7 @@ const translations = {
 
 const translatableElements = Array.from(document.querySelectorAll('body *'))
   .filter((element) => element.children.length === 0 && element.textContent.trim())
-  .map((element) => ({ element, source: element.textContent.trim() }));
+  .map((element) => ({ element, source: normalizeText(element.textContent) }));
 
 const languageAttributes = [
   ['.nav-toggle', 'aria-label', 'Open menu'],
