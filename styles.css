@@ -101,6 +101,33 @@ button {
   gap: 1.25rem;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.language-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.language-selector select {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.35rem 0.55rem;
+  background: var(--bg-elevated);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
 .site-nav a {
   color: var(--muted);
   transition: color 0.2s ease;
@@ -696,6 +723,10 @@ button {
   .site-nav a {
     width: 100%;
     padding: 0.4rem 0;
+  }
+
+  .language-selector span {
+    display: none;
   }
 
   .contact-box {
