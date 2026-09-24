@@ -1,5 +1,7 @@
 const navToggle = document.querySelector('.nav-toggle');
 const siteNav = document.querySelector('.site-nav');
+const themeToggle = document.querySelector('.theme-toggle');
+const themeToggleIcon = document.querySelector('.theme-toggle-icon');
 const year = document.getElementById('year');
 const lightbox = document.getElementById('case-lightbox');
 const lightboxImage = document.getElementById('lightbox-image');
@@ -284,6 +286,7 @@ const translatableElements = Array.from(document.querySelectorAll('body *'))
 
 const languageAttributes = [
   ['.nav-toggle', 'aria-label', 'Open menu'],
+  ['.theme-toggle', 'aria-label', 'Switch to light mode'],
   ['.hero-pills', 'aria-label', 'Key technologies'],
   ['.hero-card', 'aria-label', 'Professional summary'],
   ['.case-card-visual[data-lightbox="context/market-price.png"]', 'aria-label', 'Open market data integration preview'],
@@ -299,6 +302,8 @@ const languageAttributes = [
 const attributeTranslations = {
   es: {
     'Open menu': 'Abrir menú',
+    'Switch to light mode': 'Cambiar a modo claro',
+    'Switch to dark mode': 'Cambiar a modo oscuro',
     'Key technologies': 'Tecnologías principales',
     'Professional summary': 'Resumen profesional',
     'Open market data integration preview': 'Abrir vista previa de la integración de datos de mercado',
@@ -312,6 +317,8 @@ const attributeTranslations = {
   },
   ko: {
     'Open menu': '메뉴 열기',
+    'Switch to light mode': '라이트 모드로 전환',
+    'Switch to dark mode': '다크 모드로 전환',
     'Key technologies': '주요 기술',
     'Professional summary': '전문 경력 요약',
     'Open market data integration preview': '시장 데이터 통합 미리보기 열기',
@@ -365,6 +372,12 @@ const setLanguage = (language, persist = false) => {
   });
 
   document.documentElement.lang = selectedLanguage;
+  if (themeToggle) {
+    const themeLabel = document.documentElement.dataset.theme === 'light'
+      ? 'Switch to dark mode'
+      : 'Switch to light mode';
+    themeToggle.setAttribute('aria-label', attributeDictionary[themeLabel] || themeLabel);
+  }
   document.title = pageMetadata[selectedLanguage].title;
   document.querySelector('meta[name="description"]')?.setAttribute('content', pageMetadata[selectedLanguage].description);
   if (languageSelector) {
@@ -375,13 +388,38 @@ const setLanguage = (language, persist = false) => {
   }
 };
 
+const setTheme = (theme, persist = false) => {
+  const selectedTheme = theme === 'light' ? 'light' : 'dark';
+  const nextTheme = selectedTheme === 'light' ? 'dark' : 'light';
+  const themeLabel = nextTheme === 'light' ? 'Switch to light mode' : 'Switch to dark mode';
+  const currentLanguage = document.documentElement.lang;
+
+  document.documentElement.dataset.theme = selectedTheme;
+  if (themeToggle) {
+    themeToggle.setAttribute('aria-pressed', String(selectedTheme === 'dark'));
+    themeToggle.setAttribute('aria-label', attributeTranslations[currentLanguage]?.[themeLabel] || themeLabel);
+    themeToggle.dataset.nextTheme = nextTheme;
+    themeToggleIcon.textContent = selectedTheme === 'dark' ? '☀' : '☾';
+  }
+  if (persist) {
+    localStorage.setItem('portfolio-theme', selectedTheme);
+  }
+};
+
 const browserLanguage = navigator.languages
   .map((language) => language.split('-')[0])
   .find((language) => supportedLanguages.includes(language));
 const savedLanguage = localStorage.getItem('portfolio-language');
+const savedTheme = localStorage.getItem('portfolio-theme');
+const systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 
 setLanguage(savedLanguage || browserLanguage || 'en');
+setTheme(savedTheme || systemTheme);
 
 if (languageSelector) {
   languageSelector.addEventListener('change', () => setLanguage(languageSelector.value, true));
+}
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => setTheme(themeToggle.dataset.nextTheme, true));
 }
