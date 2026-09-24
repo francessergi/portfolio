@@ -104,6 +104,131 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
+const runDemoButton = document.getElementById('run-demo');
+const replayDemoButton = document.getElementById('replay-demo');
+const demoLog = document.getElementById('demo-log');
+const demoStatus = document.getElementById('demo-status');
+const demoMessage = document.getElementById('demo-message');
+const destinationState = document.getElementById('destination-state');
+const demoNodes = new Map(Array.from(document.querySelectorAll('.flow-node')).map((node) => [node.dataset.node, node]));
+let demoRunning = false;
+
+const demoScenarios = {
+  success: [
+    ['service', 'Webhook received', 'success'],
+    ['ingestion', 'Payload persisted durably', 'success'],
+    ['queue', 'Published to RabbitMQ', 'success'],
+    ['worker', 'Delivery worker processing event', 'success'],
+    ['destination', 'Destination accepted webhook', 'success'],
+  ],
+  temporary: [
+    ['service', 'Webhook received', 'success'],
+    ['ingestion', 'Payload persisted durably', 'success'],
+    ['queue', 'Published to RabbitMQ', 'success'],
+    ['worker', 'Delivery attempt #1 failed; event retained', 'failure'],
+    ['worker', 'Retry attempt #1 failed; event retained', 'failure'],
+    ['worker', 'Retry attempt #2 succeeded', 'success'],
+    ['destination', 'Destination accepted webhook', 'success'],
+  ],
+  permanent: [
+    ['service', 'Webhook received', 'success'],
+    ['ingestion', 'Payload persisted durably', 'success'],
+    ['queue', 'Published to RabbitMQ', 'success'],
+    ['worker', 'Delivery attempt #1 failed; event retained', 'failure'],
+    ['worker', 'Retry attempt #1 failed', 'failure'],
+    ['worker', 'Retry attempt #2 failed', 'failure'],
+    ['worker', 'Retry attempt #3 failed', 'failure'],
+    ['dlq', 'Message moved to Dead Letter Queue', 'success'],
+  ],
+  replay: [
+    ['dlq', 'Message replay requested', 'success'],
+    ['queue', 'Replayed to RabbitMQ', 'success'],
+    ['worker', 'Delivery worker processing replay', 'success'],
+    ['destination', 'Message successfully replayed and delivered', 'success'],
+  ],
+};
+
+const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+
+const addDemoLog = (message, outcome) => {
+  const item = document.createElement('li');
+  const timestamp = new Date().toLocaleTimeString('en-GB', { hour12: false });
+  const translatedMessage = translations[document.documentElement.lang]?.[message] || message;
+  item.innerHTML = `<time>${timestamp}.${String(Date.now()).slice(-3)}</time><span>${translatedMessage}${outcome === 'failure' ? '  ×' : '  ✓'}</span>`;
+  demoLog.append(item);
+  demoLog.scrollTop = demoLog.scrollHeight;
+};
+
+const resetDemo = () => {
+  demoNodes.forEach((node) => node.classList.remove('is-active', 'is-success', 'is-failure'));
+  demoMessage.classList.remove('is-visible');
+  demoMessage.style.left = '';
+  demoMessage.style.top = '';
+  destinationState.textContent = 'Waiting';
+  demoLog.replaceChildren();
+};
+
+const moveMessageTo = (nodeName) => {
+  const node = demoNodes.get(nodeName);
+  if (!node) {
+    return;
+  }
+
+  const flow = node.closest('.demo-flow');
+  const flowBounds = flow.getBoundingClientRect();
+  const nodeBounds = node.getBoundingClientRect();
+  const isCompactFlow = window.matchMedia('(max-width: 820px)').matches;
+  demoMessage.style.left = isCompactFlow
+    ? `${nodeBounds.left - flowBounds.left + (nodeBounds.width / 2)}px`
+    : `${nodeBounds.left - flowBounds.left + (nodeBounds.width / 2)}px`;
+  demoMessage.style.top = `${nodeBounds.top - flowBounds.top + (nodeBounds.height / 2)}px`;
+  demoMessage.classList.add('is-visible');
+};
+
+const runDemo = async (scenario) => {
+  if (demoRunning) {
+    return;
+  }
+
+  demoRunning = true;
+  runDemoButton.disabled = true;
+  replayDemoButton.hidden = true;
+  resetDemo();
+  demoStatus.textContent = translations[document.documentElement.lang]?.['Simulation running'] || 'Simulation running';
+
+  for (const [nodeName, message, outcome] of demoScenarios[scenario]) {
+    const node = demoNodes.get(nodeName);
+    node.classList.remove('is-success', 'is-failure');
+    node.classList.add('is-active');
+    moveMessageTo(nodeName);
+    addDemoLog(message, outcome);
+    if (nodeName === 'destination') {
+      const deliveryState = outcome === 'success' ? 'Delivered' : 'Failed';
+      destinationState.textContent = translations[document.documentElement.lang]?.[deliveryState] || deliveryState;
+    }
+    await wait(window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 650);
+    node.classList.remove('is-active');
+    node.classList.add(outcome === 'failure' ? 'is-failure' : 'is-success');
+  }
+
+  demoMessage.classList.remove('is-visible');
+  const isDeadLettered = scenario === 'permanent';
+  const status = isDeadLettered ? 'Message is recoverable in the DLQ' : 'Delivery completed';
+  demoStatus.textContent = translations[document.documentElement.lang]?.[status] || status;
+  replayDemoButton.hidden = !isDeadLettered;
+  runDemoButton.disabled = false;
+  demoRunning = false;
+};
+
+if (runDemoButton && replayDemoButton && demoLog && demoStatus && demoMessage && destinationState) {
+  runDemoButton.addEventListener('click', () => {
+    const selectedScenario = document.querySelector('input[name="scenario"]:checked');
+    runDemo(selectedScenario?.value || 'success');
+  });
+
+  replayDemoButton.addEventListener('click', () => runDemo('replay'));
+}
+
 const languageSelector = document.getElementById('language-selector');
 const supportedLanguages = ['en', 'es', 'ko'];
 const normalizeText = (text) => text.replace(/\s+/g, ' ').trim();
@@ -181,6 +306,49 @@ const translations = {
     Delivery: 'Entrega',
     'Coordinating dependencies while supporting testing, CI/CD, observability, and incident response.': 'Coordinar dependencias mientras doy soporte a pruebas, CI/CD, observabilidad y respuesta a incidentes.',
     'Selected work': 'Proyectos destacados',
+    'Interactive demo': 'Demo interactiva',
+    "See Cap'n Hook in action.": "Ve Cap'n Hook en acción.",
+    'Explore how Cap\'n Hook receives, persists, and reliably delivers webhooks—including retries and failed deliveries.': 'Explora cómo Cap\'n Hook recibe, persiste y entrega webhooks de forma fiable, incluidos reintentos y entregas fallidas.',
+    Scenario: 'Escenario',
+    'Successful delivery': 'Entrega correcta',
+    'Temporary failure': 'Fallo temporal',
+    'Permanent failure': 'Fallo permanente',
+    'Run scenario': 'Ejecutar escenario',
+    'Replay message': 'Reproducir mensaje',
+    'Visual simulation—no live services or production data are used.': 'Simulación visual: no se utilizan servicios en vivo ni datos de producción.',
+    'Third-party service': 'Servicio externo',
+    'Durable ingestion': 'Ingesta duradera',
+    'Async delivery': 'Entrega asíncrona',
+    'Delivery worker': 'Worker de entrega',
+    'Retries enabled': 'Reintentos activos',
+    'Destination API': 'API de destino',
+    Waiting: 'En espera',
+    'Dead Letter Queue': 'Cola de mensajes fallidos',
+    'Recoverable events': 'Eventos recuperables',
+    'Event log': 'Registro de eventos',
+    'Ready to simulate': 'Listo para simular',
+    'Select a scenario to trace the event flow.': 'Selecciona un escenario para seguir el flujo del evento.',
+    'Webhook received': 'Webhook recibido',
+    'Payload persisted durably': 'Payload persistido de forma duradera',
+    'Published to RabbitMQ': 'Publicado en RabbitMQ',
+    'Delivery worker processing event': 'Worker de entrega procesando el evento',
+    'Destination accepted webhook': 'El destino aceptó el webhook',
+    'Delivery attempt #1 failed; event retained': 'El intento de entrega #1 falló; el evento se conserva',
+    'Retry attempt #1 failed; event retained': 'El reintento #1 falló; el evento se conserva',
+    'Retry attempt #2 succeeded': 'El reintento #2 tuvo éxito',
+    'Retry attempt #1 failed': 'El reintento #1 falló',
+    'Retry attempt #2 failed': 'El reintento #2 falló',
+    'Retry attempt #3 failed': 'El reintento #3 falló',
+    'Message moved to Dead Letter Queue': 'Mensaje movido a la cola de mensajes fallidos',
+    'Message replay requested': 'Reproducción del mensaje solicitada',
+    'Replayed to RabbitMQ': 'Reproducido en RabbitMQ',
+    'Delivery worker processing replay': 'Worker de entrega procesando la reproducción',
+    'Message successfully replayed and delivered': 'Mensaje reproducido y entregado correctamente',
+    'Simulation running': 'Simulación en curso',
+    'Message is recoverable in the DLQ': 'El mensaje es recuperable en la cola de mensajes fallidos',
+    'Delivery completed': 'Entrega completada',
+    Delivered: 'Entregado',
+    Failed: 'Fallido',
     'Business problems translated into reliable backend and data solutions.': 'Problemas de negocio convertidos en soluciones backend y de datos fiables.',
     'Market data integration & processing pipeline': 'Integración de datos de mercado y pipeline de procesamiento',
     'Built an end-to-end flow that integrates externally collected pricing data through orchestration, analytical storage, event-driven processing, search indexing, and backend/API consumption.': 'Construí un flujo integral que integra datos de precios recopilados externamente mediante orquestación, almacenamiento analítico, procesamiento dirigido por eventos, indexación de búsqueda y consumo desde backend/APIs.',
@@ -267,6 +435,49 @@ const translations = {
     Delivery: '배포',
     'Coordinating dependencies while supporting testing, CI/CD, observability, and incident response.': '테스트, CI/CD, 관찰 가능성 및 장애 대응을 지원하면서 의존성을 조율합니다.',
     'Selected work': '주요 프로젝트',
+    'Interactive demo': '인터랙티브 데모',
+    "See Cap'n Hook in action.": "Cap'n Hook의 동작을 확인해 보세요.",
+    'Explore how Cap\'n Hook receives, persists, and reliably delivers webhooks—including retries and failed deliveries.': 'Cap\'n Hook이 웹훅을 수신, 저장하고 재시도 및 실패한 전달을 포함해 안정적으로 전송하는 방식을 살펴보세요.',
+    Scenario: '시나리오',
+    'Successful delivery': '성공적인 전달',
+    'Temporary failure': '일시적 실패',
+    'Permanent failure': '영구적 실패',
+    'Run scenario': '시나리오 실행',
+    'Replay message': '메시지 재실행',
+    'Visual simulation—no live services or production data are used.': '시각적 시뮬레이션이며 실제 서비스나 프로덕션 데이터는 사용하지 않습니다.',
+    'Third-party service': '타사 서비스',
+    'Durable ingestion': '내구성 있는 수집',
+    'Async delivery': '비동기 전달',
+    'Delivery worker': '전달 워커',
+    'Retries enabled': '재시도 활성화',
+    'Destination API': '대상 API',
+    Waiting: '대기 중',
+    'Dead Letter Queue': '데드 레터 큐',
+    'Recoverable events': '복구 가능한 이벤트',
+    'Event log': '이벤트 로그',
+    'Ready to simulate': '시뮬레이션 준비 완료',
+    'Select a scenario to trace the event flow.': '이벤트 흐름을 추적할 시나리오를 선택하세요.',
+    'Webhook received': '웹훅 수신',
+    'Payload persisted durably': '페이로드를 내구성 있게 저장',
+    'Published to RabbitMQ': 'RabbitMQ에 게시됨',
+    'Delivery worker processing event': '전달 워커가 이벤트 처리 중',
+    'Destination accepted webhook': '대상이 웹훅을 수락함',
+    'Delivery attempt #1 failed; event retained': '전달 시도 #1 실패; 이벤트는 보존됨',
+    'Retry attempt #1 failed; event retained': '재시도 #1 실패; 이벤트는 보존됨',
+    'Retry attempt #2 succeeded': '재시도 #2 성공',
+    'Retry attempt #1 failed': '재시도 #1 실패',
+    'Retry attempt #2 failed': '재시도 #2 실패',
+    'Retry attempt #3 failed': '재시도 #3 실패',
+    'Message moved to Dead Letter Queue': '메시지가 데드 레터 큐로 이동됨',
+    'Message replay requested': '메시지 재실행 요청됨',
+    'Replayed to RabbitMQ': 'RabbitMQ로 재실행됨',
+    'Delivery worker processing replay': '전달 워커가 재실행을 처리 중',
+    'Message successfully replayed and delivered': '메시지가 성공적으로 재실행되고 전달됨',
+    'Simulation running': '시뮬레이션 실행 중',
+    'Message is recoverable in the DLQ': '메시지는 데드 레터 큐에서 복구할 수 있습니다',
+    'Delivery completed': '전달 완료',
+    Delivered: '전달됨',
+    Failed: '실패',
     'Business problems translated into reliable backend and data solutions.': '비즈니스 문제를 안정적인 백엔드 및 데이터 솔루션으로 전환합니다.',
     'Market data integration & processing pipeline': '시장 데이터 통합 및 처리 파이프라인',
     'Built an end-to-end flow that integrates externally collected pricing data through orchestration, analytical storage, event-driven processing, search indexing, and backend/API consumption.': '외부에서 수집한 가격 데이터를 오케스트레이션, 분석 저장소, 이벤트 기반 처리, 검색 인덱싱 및 백엔드/API 소비로 통합하는 엔드투엔드 흐름을 구축했습니다.',

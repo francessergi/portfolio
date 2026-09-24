@@ -32,6 +32,7 @@
             <a href="#stack">Stack</a>
             <a href="#impact">Impact</a>
             <a href="#case-studies">Work</a>
+            <a href="#demo">Demo</a>
             <a href="#contact">Contact</a>
           </nav>
           <div class="nav-actions">
@@ -376,6 +377,51 @@
                   </p>
                 </div>
               </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="demo" class="section demo-section">
+          <div class="container">
+            <div class="section-heading demo-heading">
+              <p class="eyebrow">Interactive demo</p>
+              <h2>See Cap'n Hook in action.</h2>
+              <p>Explore how Cap'n Hook receives, persists, and reliably delivers webhooks—including retries and failed deliveries.</p>
+            </div>
+
+            <div class="demo-layout">
+              <div class="demo-control-panel">
+                <fieldset class="scenario-selector">
+                  <legend>Scenario</legend>
+                  <label><input type="radio" name="scenario" value="success" checked /> Successful delivery</label>
+                  <label><input type="radio" name="scenario" value="temporary" /> Temporary failure</label>
+                  <label><input type="radio" name="scenario" value="permanent" /> Permanent failure</label>
+                </fieldset>
+                <button id="run-demo" type="button" class="btn btn-primary">Run scenario</button>
+                <button id="replay-demo" type="button" class="btn btn-secondary" hidden>Replay message</button>
+                <p class="demo-disclaimer">Visual simulation—no live services or production data are used.</p>
+              </div>
+
+              <div class="demo-flow" aria-live="polite">
+                <div class="flow-track"></div>
+                <div id="demo-message" class="demo-message" aria-hidden="true"></div>
+                <div class="flow-node" data-node="service"><span>01</span><strong>Third-party service</strong><small>POST /webhook</small></div>
+                <div class="flow-node" data-node="ingestion"><span>02</span><strong>Cap'n Hook</strong><small>Durable ingestion</small></div>
+                <div class="flow-node" data-node="queue"><span>03</span><strong>RabbitMQ</strong><small>Async delivery</small></div>
+                <div class="flow-node" data-node="worker"><span>04</span><strong>Delivery worker</strong><small>Retries enabled</small></div>
+                <div class="flow-node" data-node="destination"><span>05</span><strong>Destination API</strong><small id="destination-state">Waiting</small></div>
+                <div class="flow-node dlq-node" data-node="dlq"><span>DLQ</span><strong>Dead Letter Queue</strong><small>Recoverable events</small></div>
+              </div>
+
+              <div class="demo-log-panel">
+                <div class="demo-log-header">
+                  <strong>Event log</strong>
+                  <span id="demo-status">Ready to simulate</span>
+                </div>
+                <ol id="demo-log" class="demo-log">
+                  <li><time>--:--:--.---</time><span>Select a scenario to trace the event flow.</span></li>
+                </ol>
+              </div>
             </div>
           </div>
         </section>
