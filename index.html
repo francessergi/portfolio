@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio of Sergi Francés Roca, Senior Backend Engineer focused on PHP, Symfony, distributed systems, marketplace platforms, and financial systems."
+    />
+    <title>Sergi Francés Roca | Senior Backend Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <div class="container nav-wrap">
+          <a class="brand" href="#top">
+            <span class="brand-mark">S</span>
+            <span>Sergi Francés</span>
+          </a>
+          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <nav class="site-nav">
+            <a href="#about">About</a>
+            <a href="#experience">Experience</a>
+            <a href="#stack">Stack</a>
+            <a href="#impact">Impact</a>
+            <a href="#case-studies">Work</a>
+            <a href="#contact">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="hero">
+          <div class="container hero-grid">
+            <div class="hero-copy">
+              <p class="eyebrow">Senior Backend Engineer</p>
+              <h1>I build reliable backend systems for marketplace, financial, and data-intensive workflows.</h1>
+              <p class="lead">
+                PHP/Symfony engineer experienced in distributed systems, event-driven processing, analytical
+                architectures, and database optimization—combining hands-on delivery with technical ownership.
+              </p>
+              <div class="cta-row">
+                <a href="#experience" class="btn btn-primary">View experience</a>
+                <a href="https://github.com/francessergi" target="_blank" rel="noreferrer" class="btn btn-secondary">GitHub</a>
+                <a href="https://www.linkedin.com/in/sergifrances/" target="_blank" rel="noreferrer" class="btn btn-secondary">LinkedIn</a>
+              </div>
+              <ul class="hero-pills" aria-label="Key technologies">
+                <li>PHP</li>
+                <li>Symfony</li>
+                <li>Kafka</li>
+                <li>Flink</li>
+                <li>Airbyte</li>
+                <li>ClickHouse</li>
+                <li>MySQL</li>
+              </ul>
+            </div>
+
+            <aside class="hero-card" aria-label="Professional summary">
+              <div class="profile-avatar-wrap">
+                <img class="profile-avatar" src="profile-avatar.png" alt="Sergi Francés Roca profile photo" />
+              </div>
+              <div class="card-header">
+                <span class="status-dot"></span>
+                <span>Currently</span>
+              </div>
+              <h2>Backend Software Engineer</h2>
+              <p class="company">METRO Markets GmbH</p>
+              <ul>
+                <li>Marketplace / Seller Account &amp; Offer Management</li>
+                <li>SUSA / Financial Reporting</li>
+                <li>Finance / ERP</li>
+              </ul>
+              <div class="mini-metrics">
+                <div>
+                  <strong>3</strong>
+                  <span>core areas</span>
+                </div>
+                <div>
+                  <strong>5+</strong>
+                  <span>years in backend</span>
+                </div>
+                <div>
+                  <strong>3</strong>
+                  <span>business domains</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="about" class="section">
+          <div class="container narrow">
+            <div class="section-heading">
+              <p class="eyebrow">About</p>
+              <h2>Backend engineering from product requirements to reliable delivery.</h2>
+            </div>
+            <div class="about-grid">
+              <p>
+                I translate product requirements into technical designs and implementation plans, then contribute
+                hands-on across APIs, data flows, integrations, testing, and delivery.
+              </p>
+              <p>
+                My experience spans marketplace operations, finance and ERP, analytical reporting, and distributed
+                processing—systems where data quality, reliability, and operational visibility matter.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="experience" class="section alt-bg">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">Experience</p>
+              <h2>A technical path with growing responsibility and ownership.</h2>
+            </div>
+
+            <div class="timeline">
+              <article class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <div class="timeline-topline">
+                    <span class="timeline-role">Backend Software Engineer</span>
+                    <span class="timeline-meta">METRO Markets GmbH · May 2022 – Present</span>
+                  </div>
+                  <h3>Marketplace / Seller Account &amp; Offer Management</h3>
+                  <p>
+                    Building and maintaining backend capabilities for seller onboarding, account management, offer
+                    lifecycles, competitive pricing, and destination-specific marketplace behaviour.
+                  </p>
+                  <ul>
+                    <li>Technical ownership from requirements and design through decomposition and hands-on delivery.</li>
+                    <li>End-to-end market-price data flows across orchestration, ClickHouse, Kafka/Flink, Elasticsearch, and APIs.</li>
+                    <li>Data-quality work covering GTIN relevance, duplicate handling, and downstream readiness.</li>
+                    <li>Testing, E2E demos, observability, incident response, and cross-team coordination.</li>
+                  </ul>
+                </div>
+              </article>
+
+              <article class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <div class="timeline-topline">
+                    <span class="timeline-role">Backend Engineer</span>
+                    <span class="timeline-meta">SUSA / Reporting</span>
+                  </div>
+                  <h3>Financial reporting modernization</h3>
+                  <p>
+                    Owned the technical implementation of moving analytical reporting workloads from MySQL to
+                    ClickHouse with Airbyte replication and materialized views.
+                  </p>
+                  <ul>
+                    <li>Separated complex reporting workloads from the transactional database.</li>
+                    <li>Implemented and validated reporting for sales, invoices, VAT, liabilities, and consolidated views.</li>
+                    <li>Created Grafana dashboards and alerts, including Slack notifications routed through n8n.</li>
+                  </ul>
+                </div>
+              </article>
+
+              <article class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <div class="timeline-topline">
+                    <span class="timeline-role">Backend Engineer</span>
+                    <span class="timeline-meta">Admin & Finance / ERP</span>
+                  </div>
+                  <h3>Finance / ERP / Admin &amp; Finance</h3>
+                  <p>
+                    Built and maintained business-critical functionality for invoicing, credit notes, VAT and tax,
+                    payments, e-invoicing, and marketplace-to-finance data processing.
+                  </p>
+                  <ul>
+                    <li>Migrated and extended finance integrations to the Amazon Selling Partner API.</li>
+                    <li>Implemented external financial integrations and country-specific accounting requirements.</li>
+                    <li>Improved reliability through error handling, retries, reprocessing, and automated tests.</li>
+                  </ul>
+                </div>
+              </article>
+
+              <article class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <div class="timeline-topline">
+                    <span class="timeline-role">Web Developer</span>
+                    <span class="timeline-meta">Conjurer Services / IKEA · Oct 2021 – Mar 2022</span>
+                  </div>
+                  <h3>Production web platform maintenance and evolution</h3>
+                  <p>
+                    Delivered bug fixes and incremental features for IKEA web platforms across the Balearic Islands,
+                    Canary Islands, Baltic countries, and Iceland using PHP, jQuery, and SVN.
+                  </p>
+                </div>
+              </article>
+
+              <article class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <div class="timeline-topline">
+                    <span class="timeline-role">PHP / Symfony Developer</span>
+                    <span class="timeline-meta">Tiendeo · Jan 2021 – Aug 2021</span>
+                  </div>
+                  <h3>Retail data extraction and automation</h3>
+                  <p>
+                    Developed PHP/Symfony crawlers for heterogeneous retail websites and automated scheduled data
+                    collection with Jenkins and cron across HTML, embedded JSON, and public API sources.
+                  </p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="stack" class="section">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">Stack & capabilities</p>
+              <h2>Strong experience across backend, data, and distributed systems.</h2>
+            </div>
+
+            <div class="skill-grid">
+              <div class="skill-card">
+                <h3>Backend</h3>
+                <ul>
+                  <li>PHP</li>
+                  <li>Symfony</li>
+                  <li>REST APIs</li>
+                  <li>API Design</li>
+                  <li>MySQL</li>
+                  <li>Redis</li>
+                </ul>
+              </div>
+
+              <div class="skill-card">
+                <h3>Streaming & analytics</h3>
+                <ul>
+                  <li>Kafka</li>
+                  <li>Flink</li>
+                  <li>ClickHouse</li>
+                  <li>Elasticsearch</li>
+                  <li>Airbyte</li>
+                  <li>Dagster</li>
+                </ul>
+              </div>
+
+              <div class="skill-card">
+                <h3>Infrastructure &amp; delivery</h3>
+                <ul>
+                  <li>Docker</li>
+                  <li>Google Cloud</li>
+                  <li>RabbitMQ</li>
+                  <li>Grafana</li>
+                  <li>CI/CD</li>
+                  <li>GitHub Actions / Jenkins</li>
+                </ul>
+              </div>
+
+              <div class="skill-card">
+                <h3>Engineering focus</h3>
+                <ul>
+                  <li>Technical ownership</li>
+                  <li>Software architecture</li>
+                  <li>System design</li>
+                  <li>Testing &amp; observability</li>
+                  <li>Incident response</li>
+                  <li>Cross-team coordination</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="impact" class="section accent-section">
+          <div class="container narrow">
+            <div class="section-heading">
+              <p class="eyebrow">Impact</p>
+              <h2>Ownership across design, implementation, and operations.</h2>
+            </div>
+            <div class="impact-list">
+              <div>
+                <strong>Architecture</strong>
+                <p>Turning product requirements and complex business rules into maintainable backend designs.</p>
+              </div>
+              <div>
+                <strong>Data</strong>
+                <p>Building event-driven pipelines and moving analytical workloads to scalable data architectures.</p>
+              </div>
+              <div>
+                <strong>Delivery</strong>
+                <p>Coordinating dependencies while supporting testing, CI/CD, observability, and incident response.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="case-studies" class="section alt-bg">
+          <div class="container">
+            <div class="section-heading">
+              <p class="eyebrow">Selected work</p>
+              <h2>Business problems translated into reliable backend and data solutions.</h2>
+            </div>
+
+            <div class="case-grid">
+              <article class="case-card">
+                <button class="case-card-visual" type="button" data-lightbox="context/market-price.png" data-title="Market data integration & processing pipeline" aria-label="Open market data integration preview">
+                  <img
+                    src="context/market-price.png"
+                    alt="Market Data Integration and Processing Pipeline case study"
+                  />
+                </button>
+                <div class="case-body">
+                  <h3>Market data integration & processing pipeline</h3>
+                  <p>
+                    Built an end-to-end flow that integrates externally collected pricing data through orchestration,
+                    analytical storage, event-driven processing, search indexing, and backend/API consumption.
+                  </p>
+                </div>
+              </article>
+
+              <article class="case-card">
+                <button class="case-card-visual" type="button" data-lightbox="context/case-study.png" data-title="Modernizing financial reporting" aria-label="Open financial reporting preview">
+                  <img
+                    src="context/case-study.png"
+                    alt="Modernizing Financial Reporting case study"
+                  />
+                </button>
+                <div class="case-body">
+                  <h3>Modernizing financial reporting</h3>
+                  <p>
+                    Moved analytical workloads from MySQL to ClickHouse with Airbyte replication and materialized
+                    views, reducing transactional database pressure and improving reporting scalability.
+                  </p>
+                </div>
+              </article>
+
+              <article class="case-card">
+                <button class="case-card-visual" type="button" data-lightbox="context/hook-watch.png" data-title="HookWatch" aria-label="Open HookWatch preview">
+                  <img
+                    src="context/hook-watch.png"
+                    alt="HookWatch project preview"
+                  />
+                </button>
+                <div class="case-body">
+                  <h3>HookWatch</h3>
+                  <p>
+                    A Symfony webhook reliability and observability service with durable ingestion, asynchronous
+                    RabbitMQ delivery, retry and dead-letter handling, inspection, and replay capabilities.
+                  </p>
+                  <p style="margin-top: 0.9rem;">
+                    <a href="https://github.com/francessergi/hook-watch" target="_blank" rel="noreferrer" class="btn btn-secondary">View repository</a>
+                  </p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" class="section contact-section">
+          <div class="container contact-box">
+            <div>
+              <p class="eyebrow">Contact</p>
+              <h2>Let’s talk about backend systems, architecture, and data-intensive platforms.</h2>
+            </div>
+            <div class="contact-actions">
+              <a href="mailto:francessergi92@gmail.com" class="btn btn-primary">Get in touch</a>
+              <a href="https://github.com/francessergi" target="_blank" rel="noreferrer" class="btn btn-secondary">GitHub</a>
+              <a href="https://www.linkedin.com/in/sergifrances/" target="_blank" rel="noreferrer" class="btn btn-secondary">LinkedIn</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-wrap">
+          <p>© <span id="year"></span> Sergi Francés Roca</p>
+          <p>Senior Backend Engineer • Marketplace • Financial systems • Data-intensive platforms</p>
+        </div>
+      </footer>
+    </div>
+
+    <div class="lightbox" id="case-lightbox" aria-hidden="true">
+      <div class="lightbox-backdrop" data-close-lightbox="true"></div>
+      <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+        <button class="lightbox-close" type="button" aria-label="Close image preview">×</button>
+        <img id="lightbox-image" src="" alt="" />
+        <p id="lightbox-title">Case study</p>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
