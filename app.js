@@ -8,6 +8,15 @@ const lightboxImage = document.getElementById('lightbox-image');
 const lightboxTitle = document.getElementById('lightbox-title');
 const lightboxClose = document.querySelector('.lightbox-close');
 
+const contactLink = document.querySelector('[data-contact-link]');
+
+if (contactLink) {
+  const address = String.fromCharCode(
+    104, 101, 108, 108, 111, 64, 102, 114, 97, 110, 99, 101, 115, 115, 101, 114, 103, 105, 46, 100, 101, 118,
+  );
+  contactLink.href = `mailto:${address}`;
+}
+
 if (year) {
   year.textContent = new Date().getFullYear();
 }
